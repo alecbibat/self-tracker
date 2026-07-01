@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title><%= typeof title !== 'undefined' && title ? title + ' · ' : '' %><%= (settings && settings.site && settings.site.brand) || 'Self Tracker' %></title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <% (typeof css !== 'undefined' ? css : []).forEach(function (name) { %>
+    <link rel="stylesheet" href="/static/css/<%= name %>.css" />
+  <% }); %>
+  <%- typeof head !== 'undefined' ? head : '' %>
+</head>
+<body class="<%= typeof bodyClass !== 'undefined' ? bodyClass : '' %>">

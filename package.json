@@ -1,0 +1,26 @@
+{
+  "name": "self-tracker",
+  "version": "1.0.0",
+  "description": "Personal self-tracker: habit tracker, calorie/macro/weight tracker, and a public portfolio with projects and a photo reel.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "db:reset": "node scripts/reset-db.js"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "dependencies": {
+    "connect-pg-simple": "^9.0.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "helmet": "^7.2.0",
+    "multer": "^2.2.0",
+    "pg": "^8.13.1"
+  },
+  "license": "MIT"
+}

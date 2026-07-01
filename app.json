@@ -1,0 +1,42 @@
+{
+  "name": "Self Tracker",
+  "description": "A personal self-tracker: habit tracker, calorie/macro/weight tracker, and a public portfolio with a projects page and an Instagram-style photo reel.",
+  "repository": "https://github.com/alecbibat/self-tracker",
+  "keywords": ["node", "express", "postgres", "habit-tracker", "portfolio"],
+  "env": {
+    "ADMIN_PASSWORD": {
+      "description": "The single password used to log in to the private section. Choose something strong.",
+      "required": true
+    },
+    "SESSION_SECRET": {
+      "description": "Secret used to sign session cookies.",
+      "generator": "secret"
+    },
+    "NODE_ENV": {
+      "description": "Runtime environment.",
+      "value": "production"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql:essential-0"
+    }
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "scripts": {},
+  "environments": {
+    "test": {
+      "addons": ["heroku-postgresql:essential-0"]
+    }
+  }
+}

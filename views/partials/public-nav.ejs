@@ -1,0 +1,15 @@
+<header class="topnav topnav--public">
+  <div class="container topnav__inner">
+    <a class="topnav__brand" href="/"><%= (settings && settings.site && settings.site.brand) || 'Self Tracker' %></a>
+    <nav class="topnav__links">
+      <a href="/" class="<%= currentPath === '/' ? 'is-active' : '' %>">Home</a>
+      <a href="/projects" class="<%= (currentPath || '').indexOf('/projects') === 0 ? 'is-active' : '' %>">Projects</a>
+      <% if (isAuthed) { %>
+        <a href="/app">Dashboard</a>
+        <a href="/logout" class="btn btn--ghost btn--sm">Log out</a>
+      <% } else { %>
+        <a href="/login" class="btn btn--ghost btn--sm">Log in</a>
+      <% } %>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,26 @@
+<%- include('partials/head', { title: title, bodyClass: 'auth-page' }) %>
+<main class="auth">
+  <div class="auth__card card card--pad-lg">
+    <h1 class="center">Welcome back</h1>
+    <p class="center muted">Log in to your private tracker.</p>
+    <% if (error) { %>
+      <div class="auth__error"><%= error %></div>
+    <% } %>
+    <form method="post" action="/login" class="stack">
+      <input type="hidden" name="next" value="<%= next %>" />
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" autofocus required />
+      </div>
+      <button type="submit" class="btn btn--lg btn--block">Log in</button>
+    </form>
+    <p class="center mt-2"><a href="/" class="muted text-sm">← Back to site</a></p>
+  </div>
+</main>
+<style>
+  .auth-page { background: radial-gradient(1200px 600px at 50% -10%, #1c2333, var(--bg)); }
+  .auth { display: flex; align-items: center; justify-content: center; padding: 60px 20px; min-height: 80vh; }
+  .auth__card { width: 100%; max-width: 380px; }
+  .auth__error { background: rgba(229,84,75,0.14); border: 1px solid var(--danger); color: #ffb3ad; padding: 10px 12px; border-radius: var(--radius-sm); font-size: 0.9rem; margin-bottom: 14px; }
+</style>
+<%- include('partials/footer', {}) %>

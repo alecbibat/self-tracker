@@ -1,0 +1,10 @@
+<%- include('partials/head', { title: title }) %>
+<% if (isAuthed) { %><%- include('partials/app-nav', { active: '' }) %><% } else { %><%- include('partials/public-nav') %><% } %>
+<main class="page">
+  <div class="container center" style="padding: 60px 0;">
+    <h1 style="font-size: 4rem; margin-bottom: 0;"><%= status %></h1>
+    <p class="muted"><%= message %></p>
+    <p class="mt-2"><a href="/" class="btn btn--ghost">Go home</a></p>
+  </div>
+</main>
+<%- include('partials/footer', {}) %>
