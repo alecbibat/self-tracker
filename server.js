@@ -160,6 +160,18 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 
+// Fail fast with an actionable message instead of a confusing
+// "ECONNREFUSED 127.0.0.1:5432" when the database isn't configured.
+if (!process.env.DATABASE_URL) {
+  console.error(
+    '\n[fatal] DATABASE_URL is not set — the app cannot start.\n' +
+      'On Heroku, attach Postgres (this sets DATABASE_URL automatically):\n' +
+      '    heroku addons:create heroku-postgresql:essential-0 -a <your-app>\n' +
+      'Locally, copy .env.example to .env and set DATABASE_URL.\n'
+  );
+  process.exit(1);
+}
+
 migrate()
   .then(() => {
     app.listen(PORT, () => {
@@ -167,7 +179,7 @@ migrate()
     });
   })
   .catch((err) => {
-    console.error('[fatal] failed to migrate database — is DATABASE_URL correct?', err);
+    console.error('[fatal] failed to connect to / migrate the database. Check that DATABASE_URL is correct and the Postgres add-on is attached.', err);
     process.exit(1);
   });
 
