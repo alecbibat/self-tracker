@@ -112,7 +112,7 @@ router.get('/app/nutrition', requireAuth, async (req, res, next) => {
       today: todayIso(),
       goals,
       weightGoal,
-      head: '<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>',
+      head: '',
     });
   } catch (err) {
     next(err);

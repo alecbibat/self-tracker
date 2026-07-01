@@ -5,6 +5,7 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const helmet = require('helmet');
+const compression = require('compression');
 const session = require('express-session');
 const PgSession = require('connect-pg-simple')(session);
 
@@ -18,21 +19,24 @@ const isProd = process.env.NODE_ENV === 'production';
 // Behind Heroku's router; needed for secure cookies + correct protocol.
 app.set('trust proxy', 1);
 
+// Gzip HTML/CSS/JS/JSON responses (already-compressed images are skipped).
+app.use(compression());
+
 // --- Views ---------------------------------------------------------------
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // --- Security headers ----------------------------------------------------
-// CSP allows: our own assets, the Chart.js CDN, inline styles (used for
-// full-screen background images), and images/media from data/blob/https.
+// CSP allows our own assets and inline styles (used for full-screen
+// background images). Chart.js is self-hosted, so no CDN is needed.
 app.use(
   helmet({
     contentSecurityPolicy: {
       useDefaults: true,
       directives: {
         'default-src': ["'self'"],
-        'script-src': ["'self'", 'https://cdn.jsdelivr.net'],
-        'style-src': ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+        'script-src': ["'self'"],
+        'style-src': ["'self'", "'unsafe-inline'"],
         'img-src': ["'self'", 'data:', 'blob:', 'https:'],
         'media-src': ["'self'", 'data:', 'blob:', 'https:'],
         'font-src': ["'self'", 'https:', 'data:'],
@@ -58,6 +62,12 @@ app.use(
   })
 );
 
+// Public, DB-light routes are mounted BEFORE the session + settings
+// middleware so asset/image/health requests skip that per-request work.
+// (Media is public and heavily requested — e.g. a photo reel loads many.)
+app.get('/healthz', (req, res) => res.json({ ok: true }));
+app.use('/media', require('./src/routes/media'));
+
 // --- Sessions ------------------------------------------------------------
 app.use(
   session({
@@ -65,7 +75,9 @@ app.use(
     secret: process.env.SESSION_SECRET || 'dev-insecure-secret-change-me',
     resave: false,
     saveUninitialized: false,
-    rolling: true,
+    // rolling:false avoids a session-table write on every authenticated
+    // request; the 30-day cookie lifetime is measured from login.
+    rolling: false,
     cookie: {
       httpOnly: true,
       sameSite: 'lax',
@@ -88,11 +100,13 @@ function jsonScript(value) {
 }
 
 // Make site settings available to every rendered view as `settings`.
+// JSON API routes don't render views, so they skip this entirely.
 app.use(async (req, res, next) => {
+  res.locals.jsonScript = jsonScript;
+  if (req.path.startsWith('/api/')) return next();
   try {
     res.locals.settings = await getAllSettings();
     res.locals.currentPath = req.path;
-    res.locals.jsonScript = jsonScript;
     next();
   } catch (err) {
     next(err);
@@ -100,8 +114,8 @@ app.use(async (req, res, next) => {
 });
 
 // --- Routes --------------------------------------------------------------
+// (/media and /healthz are mounted earlier, before session/settings.)
 app.use('/', require('./src/routes/auth'));
-app.use('/media', require('./src/routes/media'));
 app.use('/', require('./src/routes/public'));
 app.use('/', require('./src/routes/photos'));
 
@@ -117,9 +131,6 @@ app.get('/app', requireAuth, async (req, res, next) => {
 app.use('/', require('./src/routes/habits'));
 app.use('/', require('./src/routes/nutrition'));
 app.use('/', require('./src/routes/admin'));
-
-// Health check for uptime monitors / Heroku.
-app.get('/healthz', (req, res) => res.json({ ok: true }));
 
 // --- 404 + error handling ------------------------------------------------
 app.use((req, res) => {

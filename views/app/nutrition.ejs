@@ -102,4 +102,4 @@
 
 <script type="application/json" id="nut-bootstrap"><%- jsonScript({ today: today, goals: goals, weightGoal: weightGoal }) %></script>
 
-<%- include('../partials/footer', { js: ['nutrition'] }) %>
+<%- include('../partials/footer', { js: [{ src: '/static/js/vendor/chart.umd.min.js' }, 'nutrition'] }) %>
