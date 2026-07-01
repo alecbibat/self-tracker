@@ -20,11 +20,17 @@ const router = express.Router();
 // ---------------------------------------------------------------------------
 // Upload handling — images and videos, kept in memory for createMedia.
 // ---------------------------------------------------------------------------
+// Allowlist of safe raster image + common video types. SVG is intentionally
+// excluded — it is a scriptable document type.
+const ALLOWED_MEDIA_MIME = new Set([
+  'image/png', 'image/jpeg', 'image/gif', 'image/webp',
+  'video/mp4', 'video/webm', 'video/ogg', 'video/quicktime',
+]);
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 25 * 1024 * 1024 }, // ~25MB
+  limits: { fileSize: 25 * 1024 * 1024, files: 1, parts: 5 }, // ~25MB
   fileFilter: (req, file, cb) =>
-    cb(null, /^(image|video)\//.test(file.mimetype || '')),
+    cb(null, ALLOWED_MEDIA_MIME.has((file.mimetype || '').toLowerCase())),
 });
 
 // Wrap async handlers so thrown errors reach the Express error middleware.

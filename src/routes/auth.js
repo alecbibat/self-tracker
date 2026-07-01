@@ -33,9 +33,18 @@ router.post('/logout', (req, res) => {
 });
 
 // Only allow same-origin relative redirects to avoid open-redirect abuse.
+// Resolve against a dummy origin so browser-style normalization (e.g. a
+// backslash "/\evil.com" -> "//evil.com") is caught and rejected.
 function safeNext(next) {
-  if (typeof next === 'string' && next.startsWith('/') && !next.startsWith('//')) return next;
-  return '/app';
+  if (typeof next !== 'string' || !next.startsWith('/')) return '/app';
+  if (/[\\\x00-\x1f]/.test(next)) return '/app';
+  try {
+    const url = new URL(next, 'http://placeholder.invalid');
+    if (url.origin !== 'http://placeholder.invalid') return '/app';
+  } catch (_) {
+    return '/app';
+  }
+  return next;
 }
 
 module.exports = router;

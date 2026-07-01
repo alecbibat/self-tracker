@@ -365,9 +365,10 @@ router.get(
       let isComplete;
       if (r.type === 'yesno') {
         isComplete = done;
-      } else if (habitTarget !== null) {
+      } else if (habitTarget !== null && habitTarget > 0) {
         isComplete = value >= habitTarget;
       } else {
+        // No meaningful target (null or <= 0): any positive amount counts.
         isComplete = value > 0;
       }
       if (isComplete) completed += 1;

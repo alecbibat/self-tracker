@@ -11,11 +11,14 @@ const router = express.Router();
 // ---------------------------------------------------------------------------
 // Upload handling
 // ---------------------------------------------------------------------------
-// Images only, kept in memory so we can hand the buffer straight to createMedia.
+// Raster images only (no SVG — it is a scriptable document type). Kept in
+// memory so we can hand the buffer straight to createMedia. Counts are bounded
+// to avoid unbounded in-memory buffering.
+const ALLOWED_IMAGE_MIME = new Set(['image/png', 'image/jpeg', 'image/gif', 'image/webp']);
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 12 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => cb(null, /^image\//.test(file.mimetype)),
+  limits: { fileSize: 12 * 1024 * 1024, files: 20, parts: 25 },
+  fileFilter: (req, file, cb) => cb(null, ALLOWED_IMAGE_MIME.has((file.mimetype || '').toLowerCase())),
 });
 
 // Accept files under either 'photos' (multi) or 'photo' (single), tolerating
@@ -46,6 +49,15 @@ async function findProject(slug) {
   return rows[0] || null;
 }
 
+/** Public read path: only resolve projects that are published/visible. */
+async function findPublishedProject(slug) {
+  const { rows } = await query(
+    'SELECT id, slug, title, kind FROM projects WHERE slug = $1 AND published = true LIMIT 1',
+    [slug]
+  );
+  return rows[0] || null;
+}
+
 /** Trim a caption to a sane length, or return null for blanks. */
 function normalizeCaption(raw) {
   if (raw === null || raw === undefined) return null;
@@ -71,7 +83,7 @@ router.get(
   '/api/photos',
   wrap(async (req, res) => {
     const slug = normalizeSlug(req.query.project);
-    const project = await findProject(slug);
+    const project = await findPublishedProject(slug);
     if (!project) return res.status(404).json({ error: 'Project not found' });
 
     const { rows } = await query(

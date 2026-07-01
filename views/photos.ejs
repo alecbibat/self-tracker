@@ -22,7 +22,7 @@
 </main>
 
 <script type="application/json" id="photos-data">
-  <%- JSON.stringify({ isAuthed: Boolean(isAuthed), project: { id: project.id, slug: project.slug, title: project.title } }) %>
+  <%- jsonScript({ isAuthed: Boolean(isAuthed), project: { id: project.id, slug: project.slug, title: project.title } }) %>
 </script>
 
 <%- include('partials/footer', { js: ['photos'] }) %>

@@ -77,11 +77,22 @@ app.use(
 
 app.use(exposeAuth);
 
+// Serialize data for embedding in a <script type="application/json"> block so
+// a value containing "</script>" (or U+2028/U+2029) can't break out of the tag.
+// Views MUST use <%- jsonScript(data) %> instead of raw JSON.stringify.
+function jsonScript(value) {
+  return JSON.stringify(value === undefined ? null : value).replace(
+    /[<>&\u2028\u2029]/g,
+    (c) => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0')
+  );
+}
+
 // Make site settings available to every rendered view as `settings`.
 app.use(async (req, res, next) => {
   try {
     res.locals.settings = await getAllSettings();
     res.locals.currentPath = req.path;
+    res.locals.jsonScript = jsonScript;
     next();
   } catch (err) {
     next(err);
@@ -122,17 +133,28 @@ app.use((req, res) => {
   });
 });
 
+// Postgres error codes that mean "bad client input", not a server fault, so
+// they should surface as 400 rather than 500:
+//   22003 numeric out of range, 22007/22008 invalid datetime,
+//   22P02 invalid text representation, 23502 not-null, 23503 FK violation,
+//   23505 unique violation, 23514 check violation.
+const PG_BAD_REQUEST_CODES = new Set([
+  '22003', '22007', '22008', '22P02', '23502', '23503', '23505', '23514',
+]);
+
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  console.error('[error]', err);
-  const status = err.status || 500;
+  let status = err.status || 500;
+  if (err && PG_BAD_REQUEST_CODES.has(err.code)) status = 400;
+  if (status >= 500) console.error('[error]', err);
   if (req.path.startsWith('/api/')) {
-    return res.status(status).json({ error: err.publicMessage || 'Server error' });
+    const message = status === 400 ? err.publicMessage || 'Invalid request' : err.publicMessage || 'Server error';
+    return res.status(status).json({ error: message });
   }
   res.status(status).render('error', {
-    title: 'Something went wrong',
+    title: status === 400 ? 'Bad request' : 'Something went wrong',
     status,
-    message: isProd ? 'Something went wrong.' : String(err.stack || err),
+    message: isProd ? (status === 400 ? 'Invalid request.' : 'Something went wrong.') : String(err.stack || err),
   });
 });
 

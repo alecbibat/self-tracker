@@ -176,6 +176,12 @@ router.get('/api/nutrition/range', requireAuth, async (req, res, next) => {
     if (from > to) {
       return res.status(400).json({ error: 'from must be on or before to' });
     }
+    // Reject over-large ranges up front rather than silently truncating below.
+    const MAX_DAYS = 366;
+    const spanDays = Math.round((Date.parse(to + 'T00:00:00Z') - Date.parse(from + 'T00:00:00Z')) / 86400000) + 1;
+    if (spanDays > MAX_DAYS) {
+      return res.status(400).json({ error: 'range too large (max ' + MAX_DAYS + ' days)' });
+    }
 
     const [nutritionRes, weightRes] = await Promise.all([
       query(
@@ -212,8 +218,9 @@ router.get('/api/nutrition/range', requireAuth, async (req, res, next) => {
     // Build a dense, ordered day list from `from` to `to` inclusive.
     const days = [];
     let cursor = from;
-    // Hard cap the loop so a bad range can never spin forever.
-    for (let guard = 0; guard < 1000 && cursor <= to; guard += 1) {
+    // Hard cap the loop so a bad range can never spin forever (range is
+    // already validated to <= MAX_DAYS above, so this never truncates real data).
+    for (let guard = 0; guard <= MAX_DAYS && cursor <= to; guard += 1) {
       const nut = byDate.get(cursor);
       days.push({
         date: cursor,
