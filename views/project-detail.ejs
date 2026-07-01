@@ -1,0 +1,62 @@
+<%- include('partials/head', { title: title, css: ['public'], head: '' }) %>
+<%- include('partials/public-nav') %>
+
+<%
+  // Split plain-text description into paragraphs on blank lines. Each paragraph
+  // is HTML-escaped on output below; single newlines become breaks via CSS.
+  var paragraphs = [];
+  if (project.description) {
+    paragraphs = String(project.description)
+      .replace(/\r\n/g, '\n')
+      .split(/\n{2,}/)
+      .map(function (s) { return s.trim(); })
+      .filter(Boolean);
+  }
+  var externalHost = '';
+  if (project.external_url) {
+    try { externalHost = new URL(project.external_url).host; } catch (e) { externalHost = project.external_url; }
+  }
+%>
+
+<main class="page">
+  <div class="container project-detail">
+    <a class="project-detail__back" href="/projects">
+      <span aria-hidden="true">←</span> All projects
+    </a>
+
+    <article class="project-detail__article">
+      <header class="project-detail__header">
+        <h1 class="project-detail__title"><%= project.title %></h1>
+        <% if (project.summary) { %>
+          <p class="project-detail__summary"><%= project.summary %></p>
+        <% } %>
+      </header>
+
+      <% if (project.cover) { %>
+        <div class="project-detail__cover">
+          <img src="<%= project.cover %>" alt="<%= project.title %>" loading="lazy" />
+        </div>
+      <% } %>
+
+      <% if (paragraphs.length) { %>
+        <div class="project-detail__body prose">
+          <% paragraphs.forEach(function (para) { %>
+            <p><%= para %></p>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <p class="muted">No description provided.</p>
+      <% } %>
+
+      <% if (project.external_url) { %>
+        <div class="project-detail__actions">
+          <a class="btn btn--lg" href="<%= project.external_url %>" target="_blank" rel="noopener noreferrer">
+            Visit <% if (externalHost) { %><span class="faint"><%= externalHost %></span><% } %> <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      <% } %>
+    </article>
+  </div>
+</main>
+
+<%- include('partials/footer', { js: [] }) %>

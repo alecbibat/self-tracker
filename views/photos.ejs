@@ -1,0 +1,28 @@
+<%- include('partials/head', { title: project.title || 'Photos', css: ['photos'], head: '' }) %>
+<%- include('partials/public-nav') %>
+<main class="page">
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1><%= project.title || 'Photos' %></h1>
+        <% if (project.summary) { %>
+          <p class="subtitle"><%= project.summary %></p>
+        <% } %>
+      </div>
+      <% if (isAuthed) { %>
+        <div class="row">
+          <button type="button" class="btn" id="photos-upload-btn">Upload photos</button>
+        </div>
+      <% } %>
+    </div>
+
+    <div id="photos-status" class="empty">Loading photos…</div>
+    <div id="photos-grid" class="photo-grid" aria-live="polite" hidden></div>
+  </div>
+</main>
+
+<script type="application/json" id="photos-data">
+  <%- JSON.stringify({ isAuthed: Boolean(isAuthed), project: { id: project.id, slug: project.slug, title: project.title } }) %>
+</script>
+
+<%- include('partials/footer', { js: ['photos'] }) %>

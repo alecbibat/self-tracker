@@ -1,0 +1,233 @@
+/* =========================================================================
+   Site Admin — feature-specific styling.
+   Layout + components for the landing editor, links editor, media pickers,
+   and the projects manager. Uses design-system tokens from style.css.
+   ========================================================================= */
+
+.admin-layout { gap: 22px; }
+
+.admin-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+/* --- Fieldsets ----------------------------------------------------------- */
+.admin-fieldset {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin: 0;
+}
+.admin-fieldset legend {
+  padding: 0 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+.admin-actions { margin-top: 4px; }
+
+.admin-overlay-val {
+  color: var(--text);
+  font-size: 0.85rem;
+}
+
+/* --- Media picker (shared: landing background + project cover) ----------- */
+.admin-media {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.admin-media__preview {
+  width: 200px;
+  height: 120px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elev-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+.admin-media__preview--sm {
+  width: 160px;
+  height: 100px;
+}
+.admin-media__media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.admin-media__empty {
+  padding: 0 10px;
+  text-align: center;
+}
+.admin-media__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+.admin-media-field.is-dim {
+  opacity: 0.55;
+}
+.admin-upload {
+  cursor: pointer;
+  margin: 0;
+}
+.admin-upload input[type="file"] { display: none; }
+
+/* --- Links editor -------------------------------------------------------- */
+.admin-links-help { margin-top: 0; }
+.admin-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.admin-link {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 120px auto;
+  gap: 8px;
+  align-items: center;
+}
+.admin-link input,
+.admin-link select { margin: 0; }
+.admin-link__remove {
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.admin-link__remove:hover { color: var(--danger); }
+
+/* --- Projects manager ---------------------------------------------------- */
+.admin-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.admin-project {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  background: var(--bg-elev);
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+.admin-project:hover { border-color: var(--border-strong); }
+.admin-project.is-draft { opacity: 0.82; }
+
+.admin-project__cover {
+  width: 96px;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  flex: 0 0 auto;
+  background: var(--bg-elev-2);
+}
+.admin-project__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.admin-project__cover--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--brand), var(--accent-2));
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.admin-project__body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.admin-project__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.admin-project__title {
+  margin: 0;
+  font-size: 1.02rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+.admin-project__badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.admin-project__summary {
+  margin: 4px 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.admin-project__meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.admin-project__actions {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* --- Project modal ------------------------------------------------------- */
+.admin-modal { gap: 4px; }
+.admin-modal .field { margin-bottom: 12px; }
+.admin-modal__row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.admin-modal__pos { width: 120px; flex: 0 0 auto; }
+.admin-modal__pub { flex: 1 1 220px; margin-bottom: 12px; }
+.admin-inline-label {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.admin-cover-url { margin-top: 10px; }
+.admin-cover-url label { margin-bottom: 3px; }
+
+/* --- Responsive ---------------------------------------------------------- */
+@media (max-width: 640px) {
+  .admin-link {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "label remove"
+      "href  href"
+      "icon  icon";
+  }
+  .admin-link__label { grid-area: label; }
+  .admin-link__href { grid-area: href; }
+  .admin-link__icon { grid-area: icon; }
+  .admin-link__remove { grid-area: remove; }
+
+  .admin-project {
+    flex-wrap: wrap;
+  }
+  .admin-project__actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

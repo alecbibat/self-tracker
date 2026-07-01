@@ -1,0 +1,20 @@
+<%- include('../partials/head', { title: 'Habits', css: ['habits'], head: '' }) %>
+<%- include('../partials/app-nav', { active: 'habits' }) %>
+<main class="page">
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>Habit Tracker</h1>
+        <p class="subtitle">One calendar per habit. Tap a day to log it, and keep your streak alive.</p>
+      </div>
+      <div class="row">
+        <button type="button" class="btn" id="add-habit">＋ Add habit</button>
+      </div>
+    </div>
+
+    <div id="habits-list" class="stack" aria-live="polite">
+      <div class="empty" id="habits-loading">Loading your habits…</div>
+    </div>
+  </div>
+</main>
+<%- include('../partials/footer', { js: ['habits'] }) %>

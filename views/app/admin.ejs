@@ -1,0 +1,141 @@
+<%- include('../partials/head', { title: 'Site Admin', css: ['admin'], head: '' }) %>
+<%- include('../partials/app-nav', { active: 'admin' }) %>
+
+<main class="page">
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>Site Admin</h1>
+        <p class="subtitle">Edit your public landing page, site branding, and projects. Changes go live immediately.</p>
+      </div>
+      <div class="row row--wrap">
+        <a class="btn btn--subtle btn--sm" href="/" target="_blank" rel="noopener">View site ↗</a>
+        <a class="btn btn--subtle btn--sm" href="/projects" target="_blank" rel="noopener">View projects ↗</a>
+      </div>
+    </div>
+
+    <div class="admin-layout stack">
+
+      <!-- ============================================================= -->
+      <!-- 1) LANDING PAGE                                                -->
+      <!-- ============================================================= -->
+      <section class="card card--pad-lg" aria-labelledby="landing-title">
+        <div class="card__title">
+          <h2 id="landing-title">Landing page</h2>
+          <span class="badge badge--brand">Public home “/”</span>
+        </div>
+
+        <form id="landing-form" class="stack" novalidate>
+          <div class="field-grid admin-grid-2">
+            <div class="field">
+              <label for="landing-title-input">Title</label>
+              <input type="text" id="landing-title-input" name="title" maxlength="200" placeholder="Hello, I’m …" />
+            </div>
+            <div class="field">
+              <label for="landing-subtitle-input">Subtitle</label>
+              <input type="text" id="landing-subtitle-input" name="subtitle" maxlength="400" placeholder="A short tagline" />
+            </div>
+          </div>
+
+          <fieldset class="admin-fieldset">
+            <legend>Background</legend>
+            <div class="field-grid admin-grid-2">
+              <div class="field">
+                <label for="landing-bgtype">Type</label>
+                <select id="landing-bgtype" name="background_type">
+                  <option value="gradient">Gradient (default)</option>
+                  <option value="image">Image</option>
+                  <option value="video">Video</option>
+                </select>
+                <p class="help">Gradient needs no media. Image/video use the uploaded file, or the URL if no upload.</p>
+              </div>
+              <div class="field">
+                <label for="landing-overlay">Overlay darkness <span class="mono admin-overlay-val" id="landing-overlay-val">0.45</span></label>
+                <input type="range" id="landing-overlay" name="overlay" min="0" max="1" step="0.01" value="0.45" />
+                <p class="help">Darkens the background so text stays readable.</p>
+              </div>
+            </div>
+
+            <div class="field admin-media-field" id="landing-media-field">
+              <label>Uploaded background</label>
+              <div class="admin-media">
+                <div class="admin-media__preview" id="landing-media-preview">
+                  <span class="admin-media__empty muted text-sm">No file uploaded</span>
+                </div>
+                <div class="admin-media__actions">
+                  <label class="btn btn--subtle btn--sm admin-upload">
+                    <span id="landing-upload-label">Upload file…</span>
+                    <input type="file" id="landing-upload" accept="image/*,video/*" hidden />
+                  </label>
+                  <button type="button" class="btn btn--ghost btn--sm" id="landing-media-clear" hidden>Remove</button>
+                </div>
+              </div>
+              <input type="hidden" id="landing-media-id" name="background_media_id" />
+            </div>
+
+            <div class="field">
+              <label for="landing-bgurl">…or background URL</label>
+              <input type="url" id="landing-bgurl" name="background_url" maxlength="2000" placeholder="https://…" />
+              <p class="help">Used only when there is no uploaded file above.</p>
+            </div>
+          </fieldset>
+
+          <fieldset class="admin-fieldset">
+            <legend>Links</legend>
+            <p class="help admin-links-help">Buttons shown on the landing page. Drag isn’t needed — order top to bottom.</p>
+            <div id="landing-links" class="admin-links"></div>
+            <button type="button" class="btn btn--subtle btn--sm" id="landing-add-link">+ Add link</button>
+          </fieldset>
+
+          <div class="row row--end admin-actions">
+            <button type="submit" class="btn" id="landing-save">Save landing page</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- 2) SITE SETTINGS                                               -->
+      <!-- ============================================================= -->
+      <section class="card card--pad-lg" aria-labelledby="site-title">
+        <div class="card__title">
+          <h2 id="site-title">Site settings</h2>
+        </div>
+
+        <form id="site-form" class="stack" novalidate>
+          <div class="field-grid admin-grid-2">
+            <div class="field">
+              <label for="site-brand">Brand name</label>
+              <input type="text" id="site-brand" name="brand" maxlength="120" placeholder="My Self Tracker" />
+              <p class="help">Shown in the page title bar and browser tab.</p>
+            </div>
+            <div class="field">
+              <label for="site-footer">Footer text</label>
+              <input type="text" id="site-footer" name="footer_text" maxlength="300" placeholder="© You, 2026" />
+            </div>
+          </div>
+          <div class="row row--end admin-actions">
+            <button type="submit" class="btn" id="site-save">Save site settings</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- 3) PROJECTS                                                    -->
+      <!-- ============================================================= -->
+      <section class="card card--pad-lg" aria-labelledby="projects-title">
+        <div class="card__title">
+          <h2 id="projects-title">Projects</h2>
+          <button type="button" class="btn btn--sm" id="project-add">+ New project</button>
+        </div>
+        <div id="projects-list" class="admin-projects">
+          <div class="muted text-sm">Loading…</div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<script type="application/json" id="admin-bootstrap"><%- JSON.stringify({ landing: landing, site: site, linkIcons: linkIcons }) %></script>
+
+<%- include('../partials/footer', { js: ['admin'] }) %>

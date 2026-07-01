@@ -1,0 +1,105 @@
+<%- include('../partials/head', { title: 'Nutrition', css: ['nutrition'], head: head }) %>
+<%- include('../partials/app-nav', { active: 'nutrition' }) %>
+
+<main class="page">
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>Nutrition &amp; Weight</h1>
+        <p class="subtitle">Log meals and weight, track macros against your goals, and watch the trends.</p>
+      </div>
+      <div class="row row--wrap">
+        <button class="btn btn--subtle btn--sm" id="btn-manage-foods" type="button">Saved foods</button>
+        <button class="btn btn--subtle btn--sm" id="btn-edit-goals" type="button">Goals</button>
+      </div>
+    </div>
+
+    <!-- Day selector ------------------------------------------------------ -->
+    <div class="card nut-daybar mb-2">
+      <div class="row row--between row--wrap">
+        <div class="row nut-datepick">
+          <button class="btn btn--ghost btn--icon" id="day-prev" type="button" aria-label="Previous day">‹</button>
+          <input type="date" id="day-input" class="nut-date" aria-label="Selected day" />
+          <button class="btn btn--ghost btn--icon" id="day-next" type="button" aria-label="Next day">›</button>
+          <button class="btn btn--ghost btn--sm" id="day-today" type="button">Today</button>
+        </div>
+        <div class="nut-daylabel muted text-sm" id="day-label"></div>
+      </div>
+    </div>
+
+    <div class="grid nut-layout">
+      <!-- Left column: summary + weight ---------------------------------- -->
+      <div class="stack">
+        <!-- Day summary -->
+        <section class="card" aria-labelledby="summary-title">
+          <div class="card__title"><h3 id="summary-title">Day summary</h3></div>
+          <div id="day-summary" class="nut-summary">
+            <div class="muted text-sm">Loading…</div>
+          </div>
+        </section>
+
+        <!-- Weight -->
+        <section class="card" aria-labelledby="weight-title">
+          <div class="card__title"><h3 id="weight-title">Weight</h3></div>
+          <div id="weight-panel" class="stack">
+            <div class="muted text-sm">Loading…</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right column: log a meal + logged meals ------------------------ -->
+      <div class="stack">
+        <!-- Log a meal -->
+        <section class="card" aria-labelledby="log-title">
+          <div class="card__title">
+            <h3 id="log-title">Log a meal</h3>
+            <button class="btn btn--sm" id="btn-custom-meal" type="button">Add custom</button>
+          </div>
+          <div class="field">
+            <input type="search" id="food-search" placeholder="Search your saved foods…" autocomplete="off" aria-label="Search saved foods" />
+          </div>
+          <div id="food-results" class="nut-results"></div>
+        </section>
+
+        <!-- Logged meals -->
+        <section class="card" aria-labelledby="meals-title">
+          <div class="card__title"><h3 id="meals-title">Logged meals</h3></div>
+          <div id="meals-list"></div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Trends ------------------------------------------------------------ -->
+    <section class="card mt-3" aria-labelledby="trends-title">
+      <div class="card__title nut-trends-head">
+        <h3 id="trends-title">Trends</h3>
+        <div class="segmented" id="range-seg" role="tablist" aria-label="Trend range">
+          <button type="button" data-range="7" class="is-active" role="tab">Week</button>
+          <button type="button" data-range="30" role="tab">Month</button>
+          <button type="button" data-range="90" role="tab">3 Months</button>
+        </div>
+      </div>
+
+      <div id="trends-averages" class="nut-averages"></div>
+
+      <div class="nut-charts">
+        <div class="nut-chart-block">
+          <h4 class="text-sm muted mb-1">Calories per day</h4>
+          <div class="chart-wrap chart-wrap--sm"><canvas id="chart-calories"></canvas></div>
+        </div>
+        <div class="nut-chart-block">
+          <h4 class="text-sm muted mb-1">Macros per day (g)</h4>
+          <div class="chart-wrap chart-wrap--sm"><canvas id="chart-macros"></canvas></div>
+        </div>
+        <div class="nut-chart-block">
+          <h4 class="text-sm muted mb-1">Weight</h4>
+          <div class="chart-wrap chart-wrap--sm"><canvas id="chart-weight"></canvas></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script type="application/json" id="nut-bootstrap"><%- JSON.stringify({ today: today, goals: goals, weightGoal: weightGoal }) %></script>
+
+<%- include('../partials/footer', { js: ['nutrition'] }) %>

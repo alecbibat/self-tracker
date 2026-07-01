@@ -1,0 +1,203 @@
+/* =========================================================================
+   Habit Tracker — one calendar card per habit.
+   ========================================================================= */
+
+.habit-card {
+  --habit-color: #5b8def;
+  padding: 20px;
+}
+
+/* --- Header --------------------------------------------------------------- */
+.habit-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.habit-head__main { min-width: 0; }
+.habit-head__side {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.habit-title-row { gap: 10px; margin-bottom: 8px; }
+.habit-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--habit-color) 22%, transparent);
+}
+.habit-name {
+  margin: 0;
+  font-size: 1.15rem;
+  overflow-wrap: anywhere;
+}
+.habit-badges { gap: 6px; }
+
+/* --- Stats ---------------------------------------------------------------- */
+.habit-stats { gap: 18px; }
+.habit-stat {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+}
+.habit-stat__num {
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.habit-stat__label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  margin-top: 2px;
+}
+.habit-actions { gap: 8px; }
+.habit-delete:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* --- Month pager ---------------------------------------------------------- */
+.habit-pager {
+  margin-bottom: 10px;
+  padding: 4px 2px;
+}
+.habit-month-label {
+  font-weight: 650;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+.habit-pager .btn--icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+/* --- Calendar grid -------------------------------------------------------- */
+.habit-cal {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.habit-cal__wd {
+  text-align: center;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  padding-bottom: 2px;
+}
+
+.habit-cal__cell {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elev-2);
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.12s ease, transform 0.08s ease, background 0.12s ease;
+  overflow: hidden;
+  min-height: 34px;
+}
+.habit-cal__cell:hover {
+  border-color: var(--habit-color);
+  transform: translateY(-1px);
+}
+.habit-cal__cell:focus-visible {
+  outline: none;
+  border-color: var(--habit-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--habit-color) 30%, transparent);
+}
+
+.habit-cal__cell--empty {
+  background: transparent;
+  border-color: transparent;
+  cursor: default;
+  pointer-events: none;
+}
+
+.habit-cal__day {
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  z-index: 1;
+}
+.habit-cal__val {
+  font-size: 0.7rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  z-index: 1;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+/* Completed (yesno) — fully filled with the habit color. */
+.habit-cal__cell.is-complete {
+  background: var(--habit-color);
+  border-color: var(--habit-color);
+}
+.habit-cal__cell.is-complete .habit-cal__day {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Quantity fill — intensity driven by --fill (0..1). */
+.habit-cal__cell.has-value::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--habit-color);
+  opacity: calc(0.25 + 0.75 * var(--fill, 0));
+  z-index: 0;
+}
+.habit-cal__cell.has-value {
+  border-color: var(--habit-color);
+}
+.habit-cal__cell.has-value .habit-cal__day,
+.habit-cal__cell.has-value .habit-cal__val {
+  color: #fff;
+}
+
+/* Today marker. */
+.habit-cal__cell.is-today {
+  box-shadow: inset 0 0 0 2px var(--brand);
+}
+.habit-cal__cell.is-today.is-complete,
+.habit-cal__cell.is-today.has-value {
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+/* Future days — visible but not interactive. */
+.habit-cal__cell.is-future {
+  cursor: default;
+  opacity: 0.4;
+  background: transparent;
+  border-style: dashed;
+}
+.habit-cal__cell.is-future:hover {
+  border-color: var(--border);
+  transform: none;
+}
+
+/* --- Responsive ----------------------------------------------------------- */
+@media (max-width: 560px) {
+  .habit-head__side { width: 100%; justify-content: space-between; }
+  .habit-cal { gap: 4px; }
+  .habit-cal__val { font-size: 0.62rem; }
+  .habit-cal__day { font-size: 0.72rem; }
+}

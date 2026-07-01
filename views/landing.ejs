@@ -1,0 +1,61 @@
+<%- include('partials/head', { title: title, css: ['public'], head: '' }) %>
+<%- include('partials/public-nav') %>
+
+<%
+  // Icon glyphs for the landing link buttons (simple, dependency-free).
+  var ICONS = {
+    file: '📄', star: '★', grid: '▦', link: '↗', mail: '✉',
+    github: '⌥', globe: '🌐', book: '📖', code: '⟨⟩', heart: '♥'
+  };
+%>
+
+<main class="hero hero--<%= landing.background_type || 'gradient' %>">
+  <% if ((landing.background_type === 'image') && backgroundSrc) { %>
+    <div class="hero__bg hero__bg--image" style="background-image: url('<%= backgroundSrc %>');" aria-hidden="true"></div>
+  <% } else if ((landing.background_type === 'video') && backgroundSrc) { %>
+    <video class="hero__bg hero__bg--video" autoplay muted loop playsinline aria-hidden="true">
+      <source src="<%= backgroundSrc %>" />
+    </video>
+  <% } else { %>
+    <div class="hero__bg hero__bg--gradient" aria-hidden="true"></div>
+  <% } %>
+
+  <div class="hero__overlay" aria-hidden="true" style="opacity: <%= overlay %>;"></div>
+
+  <div class="hero__content">
+    <div class="container hero__inner">
+      <% if (landing.title) { %>
+        <h1 class="hero__title"><%= landing.title %></h1>
+      <% } %>
+      <% if (landing.subtitle) { %>
+        <p class="hero__subtitle"><%= landing.subtitle %></p>
+      <% } %>
+
+      <% if (links && links.length) { %>
+        <div class="hero__links">
+          <% links.forEach(function (lnk) { %>
+            <% if (lnk && lnk.label && lnk.href) {
+                 var external = /^https?:\/\//i.test(lnk.href);
+                 var glyph = lnk.icon && ICONS[lnk.icon] ? ICONS[lnk.icon] : '';
+            %>
+              <a
+                class="btn btn--lg hero__link"
+                href="<%= lnk.href %>"
+                <% if (external) { %>target="_blank" rel="noopener noreferrer"<% } %>
+              >
+                <% if (glyph) { %><span class="hero__link-icon" aria-hidden="true"><%= glyph %></span><% } %>
+                <span><%= lnk.label %></span>
+              </a>
+            <% } %>
+          <% }); %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <a class="hero__scroll" href="/projects" aria-label="See projects">
+    <span class="hero__scroll-chevron" aria-hidden="true"></span>
+  </a>
+</main>
+
+<%- include('partials/footer', { js: [] }) %>

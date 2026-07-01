@@ -1,0 +1,45 @@
+<%- include('partials/head', { title: title, css: ['public'], head: '' }) %>
+<%- include('partials/public-nav') %>
+
+<main class="page">
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>Projects</h1>
+        <p class="subtitle">Things I’ve built, shot, and shipped.</p>
+      </div>
+    </div>
+
+    <% if (!projects.length) { %>
+      <div class="empty">
+        <p>No projects to show yet.</p>
+        <p class="text-sm faint">Check back soon.</p>
+      </div>
+    <% } else { %>
+      <div class="grid grid--auto project-grid">
+        <% projects.forEach(function (p) { %>
+          <a class="project-card" href="/projects/<%= p.slug %>">
+            <div class="project-card__cover<%= p.cover ? '' : ' project-card__cover--placeholder' %>"
+                 <% if (p.cover) { %>style="background-image: url('<%= p.cover %>');"<% } %>>
+              <% if (!p.cover) { %>
+                <span class="project-card__initial" aria-hidden="true"><%= (p.title || '?').trim().charAt(0).toUpperCase() %></span>
+              <% } %>
+              <% if (p.kind === 'photos') { %>
+                <span class="project-card__tag badge badge--brand">Photos</span>
+              <% } %>
+            </div>
+            <div class="project-card__body">
+              <h2 class="project-card__title"><%= p.title %></h2>
+              <% if (p.summary) { %>
+                <p class="project-card__summary"><%= p.summary %></p>
+              <% } %>
+              <span class="project-card__cta">View <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</main>
+
+<%- include('partials/footer', { js: [] }) %>

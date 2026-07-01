@@ -1,0 +1,167 @@
+/* =========================================================================
+   Nutrition & weight tracker — feature-specific styling.
+   Only styles not already covered by the shared design system live here.
+   ========================================================================= */
+
+/* --- Day selector bar ----------------------------------------------------- */
+.nut-daybar { padding: 12px 16px; }
+.nut-datepick { gap: 8px; }
+.nut-date { width: auto; min-width: 168px; }
+.nut-daylabel { font-weight: 550; }
+
+/* --- Two-column responsive layout ---------------------------------------- */
+.nut-layout { grid-template-columns: 1fr 1.2fr; align-items: start; }
+@media (max-width: 900px) {
+  .nut-layout { grid-template-columns: 1fr; }
+}
+
+/* --- Day summary ---------------------------------------------------------- */
+.nut-summary { display: flex; flex-direction: column; gap: 16px; }
+
+.nut-cal {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.nut-cal__big { font-size: 2rem; font-weight: 700; line-height: 1; }
+.nut-cal__goal { color: var(--text-muted); font-size: 0.95rem; }
+.nut-cal__remain { font-size: 0.8rem; }
+
+.nut-metric + .nut-metric { margin-top: 12px; }
+.nut-metric__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  gap: 8px;
+}
+.nut-metric__name { font-size: 0.85rem; color: var(--text-muted); }
+.nut-metric__val { font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+.nut-metric__val .over { color: var(--warn); font-weight: 600; }
+
+/* Distinct macro accents on the progress bars (still uses .progress). */
+.progress__bar.bar--protein { background: var(--brand); }
+.progress__bar.bar--carbs { background: var(--accent-2); }
+.progress__bar.bar--fat { background: var(--warn); }
+.progress__bar.is-over { background: var(--danger) !important; }
+
+/* --- Food search results -------------------------------------------------- */
+.nut-results { display: flex; flex-direction: column; gap: 8px; }
+.nut-results:empty { display: none; }
+
+.food-hit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elev-2);
+}
+.food-hit__main { flex: 1; min-width: 0; }
+.food-hit__name { font-weight: 550; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.food-hit__macros { font-size: 0.78rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.food-hit__qty { width: 68px; flex: 0 0 auto; }
+.food-hit__qty input { padding: 6px 8px; text-align: center; }
+
+.nut-hint { font-size: 0.85rem; color: var(--text-faint); padding: 4px 2px; }
+
+/* --- Logged meals list ---------------------------------------------------- */
+.meal-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.meal-row:last-child { border-bottom: none; }
+.meal-row__main { flex: 1; min-width: 0; }
+.meal-row__name { font-weight: 550; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.meal-row__macros { font-size: 0.78rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.meal-row__cal { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.meal-row__del { flex: 0 0 auto; }
+
+.meals-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  margin-top: 4px;
+  border-top: 2px solid var(--border-strong);
+  font-weight: 600;
+}
+.meals-total__macros { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+
+/* --- Weight panel --------------------------------------------------------- */
+.weight-current {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.weight-current__val { font-size: 1.9rem; font-weight: 700; line-height: 1; }
+.weight-current__unit { color: var(--text-muted); }
+.weight-delta { font-size: 0.85rem; }
+.weight-delta.up { color: var(--warn); }
+.weight-delta.down { color: var(--success); }
+.weight-form { display: flex; gap: 8px; align-items: flex-end; }
+.weight-form .field { margin-bottom: 0; flex: 1; }
+.weight-goalline { font-size: 0.8rem; color: var(--text-faint); }
+
+/* --- Trends --------------------------------------------------------------- */
+.nut-trends-head { flex-wrap: wrap; gap: 10px; }
+
+.nut-averages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.avg-stat {
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+.avg-stat__label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); }
+.avg-stat__val { font-size: 1.3rem; font-weight: 700; line-height: 1.2; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.avg-stat__sub { font-size: 0.75rem; color: var(--text-muted); }
+.avg-stat__sub.up { color: var(--warn); }
+.avg-stat__sub.down { color: var(--success); }
+
+.nut-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.nut-chart-block:first-child { grid-column: 1 / -1; }
+@media (max-width: 760px) {
+  .nut-charts { grid-template-columns: 1fr; }
+}
+.nut-chart-block h4 { font-weight: 600; }
+
+/* --- Modal helpers -------------------------------------------------------- */
+.macro-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+@media (max-width: 520px) {
+  .macro-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.foods-manage-list { display: flex; flex-direction: column; }
+.foods-manage-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.foods-manage-row:last-child { border-bottom: none; }
+.foods-manage-row__main { flex: 1; min-width: 0; }
+.foods-manage-row__name { font-weight: 550; }
+.foods-manage-row__macros { font-size: 0.78rem; color: var(--text-muted); }
+.foods-manage-row__actions { display: flex; gap: 6px; flex: 0 0 auto; }
