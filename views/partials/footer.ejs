@@ -5,12 +5,12 @@
     </div>
   </footer>
   <div id="toast-root" class="toast-root" aria-live="polite"></div>
-  <script src="/static/js/common.js"></script>
+  <script src="/static/js/common.js?v=<%= assetVersion %>"></script>
   <% (typeof js !== 'undefined' ? js : []).forEach(function (entry) { %>
     <% if (entry && entry.src) { %>
       <script src="<%= entry.src %>"<%= entry.defer ? ' defer' : '' %>></script>
     <% } else { %>
-      <script src="/static/js/<%= entry %>.js"></script>
+      <script src="/static/js/<%= entry %>.js?v=<%= assetVersion %>"></script>
     <% } %>
   <% }); %>
 </body>

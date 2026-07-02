@@ -19,10 +19,10 @@
 }
 .admin-fieldset legend {
   padding: 0 8px;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--label-ls);
   color: var(--text-muted);
 }
 .admin-actions { margin-top: 4px; }

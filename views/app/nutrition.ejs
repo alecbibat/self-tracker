@@ -84,15 +84,15 @@
 
       <div class="nut-charts">
         <div class="nut-chart-block">
-          <h4 class="text-sm muted mb-1">Calories per day</h4>
+          <h4 class="mb-1">Calories per day</h4>
           <div class="chart-wrap chart-wrap--sm"><canvas id="chart-calories"></canvas></div>
         </div>
         <div class="nut-chart-block">
-          <h4 class="text-sm muted mb-1">Macros per day (g)</h4>
+          <h4 class="mb-1">Macros per day (g)</h4>
           <div class="chart-wrap chart-wrap--sm"><canvas id="chart-macros"></canvas></div>
         </div>
         <div class="nut-chart-block">
-          <h4 class="text-sm muted mb-1">Weight</h4>
+          <h4 class="mb-1">Weight</h4>
           <div class="chart-wrap chart-wrap--sm"><canvas id="chart-weight"></canvas></div>
         </div>
       </div>
@@ -102,4 +102,4 @@
 
 <script type="application/json" id="nut-bootstrap"><%- jsonScript({ today: today, goals: goals, weightGoal: weightGoal }) %></script>
 
-<%- include('../partials/footer', { js: [{ src: '/static/js/vendor/chart.umd.min.js' }, 'nutrition'] }) %>
+<%- include('../partials/footer', { js: [{ src: '/static/js/vendor/chart.umd.min.js?v=' + assetVersion }, 'nutrition'] }) %>

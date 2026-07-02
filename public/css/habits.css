@@ -57,16 +57,13 @@
 }
 .habit-stat__label {
   font-size: 0.7rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: var(--label-ls);
   color: var(--text-faint);
   margin-top: 2px;
 }
 .habit-actions { gap: 8px; }
-.habit-delete:hover {
-  border-color: var(--danger);
-  color: var(--danger);
-}
 
 /* --- Month pager ---------------------------------------------------------- */
 .habit-pager {
@@ -74,7 +71,7 @@
   padding: 4px 2px;
 }
 .habit-month-label {
-  font-weight: 650;
+  font-weight: 600;
   font-size: 1rem;
   letter-spacing: 0.01em;
 }
@@ -94,7 +91,7 @@
   font-size: 0.68rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   color: var(--text-faint);
   padding-bottom: 2px;
 }
@@ -154,7 +151,7 @@
   border-color: var(--habit-color);
 }
 .habit-cal__cell.is-complete .habit-cal__day {
-  color: #fff;
+  color: var(--habit-ink, #fff);
   font-weight: 700;
 }
 
@@ -172,7 +169,7 @@
 }
 .habit-cal__cell.has-value .habit-cal__day,
 .habit-cal__cell.has-value .habit-cal__val {
-  color: #fff;
+  color: var(--habit-ink, #fff);
 }
 
 /* Today marker. */
@@ -181,13 +178,13 @@
 }
 .habit-cal__cell.is-today.is-complete,
 .habit-cal__cell.is-today.has-value {
-  box-shadow: inset 0 0 0 2px #fff;
+  box-shadow: inset 0 0 0 2px var(--habit-ink, #fff);
 }
 
 /* Future days — visible but not interactive. */
 .habit-cal__cell.is-future {
   cursor: default;
-  opacity: 0.4;
+  opacity: 0.6;
   background: transparent;
   border-style: dashed;
 }

@@ -10,7 +10,7 @@
       const data = await api.get('/api/habits/summary?date=' + today);
       if (!data.total) { box.textContent = 'No habits yet. Add some →'; return; }
       box.innerHTML =
-        '<strong style="font-size:1.4rem">' + data.completed + '/' + data.total + '</strong> ' +
+        '<strong style="font-size:1.4rem;color:var(--text)">' + data.completed + '/' + data.total + '</strong> ' +
         '<span class="muted">habits done today</span>';
     } catch (_) {
       box.textContent = 'Could not load habits.';
@@ -24,7 +24,7 @@
       const t = data.totals || {};
       const g = data.goals || {};
       box.innerHTML =
-        '<strong style="font-size:1.4rem">' + fmt.num(t.calories) + '</strong> ' +
+        '<strong style="font-size:1.4rem;color:var(--text)">' + fmt.num(t.calories) + '</strong> ' +
         '<span class="muted">/ ' + fmt.num(g.calories) + ' kcal</span><br>' +
         '<span class="text-sm muted">P ' + fmt.num(t.protein) + ' · C ' + fmt.num(t.carbs) + ' · F ' + fmt.num(t.fat) + '</span>';
     } catch (_) {

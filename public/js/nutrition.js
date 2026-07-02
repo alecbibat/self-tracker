@@ -63,6 +63,15 @@
     grid: cssVar('--chart-grid', '#1c1e23'),
   };
 
+  // Thin-stroke chevron used for weight-trend indicators (replaces ▲/▼).
+  function trendArrow(up) {
+    return el('span', {
+      class: 'trend-arrow',
+      'aria-hidden': 'true',
+      html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="' + (up ? 'M6 14l6-6 6 6' : 'M6 10l6 6 6-6') + '"/></svg>',
+    });
+  }
+
   // =====================================================================
   // Day view
   // =====================================================================
@@ -176,7 +185,7 @@
             'aria-label': 'Delete meal',
             title: 'Delete meal',
             onClick: function () { deleteMeal(m.id); },
-          }, ['✕']),
+          }, ['×']),
         ])
       );
     });
@@ -201,14 +210,15 @@
     var prev = data.prevWeight;
 
     if (current === null || current === undefined) {
-      box.appendChild(el('div', { class: 'muted text-sm' }, ['No weight recorded for this day.']));
+      box.appendChild(el('div', { class: 'empty empty--sm' }, ['No weight recorded for this day.']));
     } else {
       var deltaNode = null;
       if (prev !== null && prev !== undefined) {
         var diff = round(num(current) - num(prev), 1);
         if (diff !== 0) {
           deltaNode = el('span', { class: 'weight-delta ' + (diff > 0 ? 'up' : 'down') }, [
-            (diff > 0 ? '▲ +' : '▼ ') + fmt.num(Math.abs(diff), 1) + ' ' + unit + ' vs ' + fmt.prettyDate(data.prevDate),
+            trendArrow(diff > 0),
+            (diff > 0 ? '+' : '') + fmt.num(Math.abs(diff), 1) + ' ' + unit + ' vs ' + fmt.prettyDate(data.prevDate),
           ]);
         } else {
           deltaNode = el('span', { class: 'weight-delta muted' }, ['No change vs ' + fmt.prettyDate(data.prevDate)]);
@@ -663,7 +673,7 @@
               el('div', { class: 'foods-manage-row__actions' }, [
                 el('button', { class: 'btn btn--ghost btn--sm', type: 'button', onClick: function () { editFoodModal(food, refresh); } }, ['Edit']),
                 el('button', {
-                  class: 'btn btn--ghost btn--sm', type: 'button',
+                  class: 'btn btn--ghost btn--sm btn--quiet-danger', type: 'button',
                   onClick: async function () {
                     var ok = await App.confirm('Delete “' + food.name + '” from your saved foods?', { confirmLabel: 'Delete' });
                     if (!ok) return;
@@ -794,7 +804,7 @@
       return el('div', { class: 'avg-stat' }, [
         el('div', { class: 'avg-stat__label' }, [label]),
         el('div', { class: 'avg-stat__val' }, [val]),
-        sub ? el('div', { class: 'avg-stat__sub' + (subCls ? ' ' + subCls : '') }, [sub]) : null,
+        sub ? el('div', { class: 'avg-stat__sub' + (subCls ? ' ' + subCls : '') }, [].concat(sub)) : null,
       ]);
     }
 
@@ -807,8 +817,8 @@
     var wSub = '';
     var wCls = '';
     if (avg.weightTrend !== null) {
-      if (avg.weightTrend > 0) { wSub = '▲ +' + fmt.num(avg.weightTrend, 1) + ' ' + WEIGHT_GOAL.unit; wCls = 'up'; }
-      else if (avg.weightTrend < 0) { wSub = '▼ ' + fmt.num(avg.weightTrend, 1) + ' ' + WEIGHT_GOAL.unit; wCls = 'down'; }
+      if (avg.weightTrend > 0) { wSub = [trendArrow(true), '+' + fmt.num(avg.weightTrend, 1) + ' ' + WEIGHT_GOAL.unit]; wCls = 'up'; }
+      else if (avg.weightTrend < 0) { wSub = [trendArrow(false), fmt.num(Math.abs(avg.weightTrend), 1) + ' ' + WEIGHT_GOAL.unit]; wCls = 'down'; }
       else { wSub = 'No change'; }
     } else if (avg.weightLatest !== null) {
       wSub = 'Only one reading';

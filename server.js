@@ -16,6 +16,12 @@ const { getAllSettings } = require('./src/settings');
 const app = express();
 const isProd = process.env.NODE_ENV === 'production';
 
+// Cache-busting token for /static asset URLs (?v=...). Heroku sets
+// SOURCE_VERSION to the deployed commit SHA; package.json version is the
+// local fallback. Without this, the 7-day static maxAge would serve
+// returning visitors a stale mix of old and new CSS/JS after a deploy.
+const ASSET_VERSION = (process.env.SOURCE_VERSION || require('./package.json').version).slice(0, 12);
+
 // Behind Heroku's router; needed for secure cookies + correct protocol.
 app.set('trust proxy', 1);
 
@@ -103,6 +109,7 @@ function jsonScript(value) {
 // JSON API routes don't render views, so they skip this entirely.
 app.use(async (req, res, next) => {
   res.locals.jsonScript = jsonScript;
+  res.locals.assetVersion = ASSET_VERSION;
   if (req.path.startsWith('/api/')) return next();
   try {
     res.locals.settings = await getAllSettings();

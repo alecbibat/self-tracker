@@ -1,6 +1,6 @@
 <header class="topnav topnav--app">
   <div class="container topnav__inner">
-    <a class="topnav__brand" href="/app">Self Tracker</a>
+    <a class="topnav__brand" href="/app"><%= (settings && settings.site && settings.site.brand) || 'Self Tracker' %></a>
     <nav class="topnav__links">
       <a href="/app" class="<%= active === 'dashboard' ? 'is-active' : '' %>">Dashboard</a>
       <a href="/app/habits" class="<%= active === 'habits' ? 'is-active' : '' %>">Habits</a>

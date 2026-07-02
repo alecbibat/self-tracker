@@ -307,9 +307,9 @@
         p.published
           ? el('a', { class: 'btn btn--ghost btn--sm', href: '/projects/' + p.slug, target: '_blank', rel: 'noopener' }, ['View'])
           : null,
-        el('button', { class: 'btn btn--subtle btn--sm', type: 'button', onClick: function () { openProjectModal(p); } }, ['Edit']),
+        el('button', { class: 'btn btn--ghost btn--sm', type: 'button', onClick: function () { openProjectModal(p); } }, ['Edit']),
         isPhotos ? null : el('button', {
-          class: 'btn btn--danger btn--sm', type: 'button',
+          class: 'btn btn--ghost btn--sm btn--quiet-danger', type: 'button',
           onClick: function () { deleteProject(p); },
         }, ['Delete']),
       ]);

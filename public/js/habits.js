@@ -10,6 +10,19 @@
   var fmt = App.fmt;
 
   var DEFAULT_COLOR = '#c4a265';
+
+  // Dark ink on light habit colors, white on dark ones (WCAG luminance cut).
+  function inkFor(hex) {
+    var m = /^#([0-9a-f]{6})$/i.exec(hex || '');
+    if (!m) return '#fff';
+    var n = parseInt(m[1], 16);
+    var lin = function (c) {
+      c /= 255;
+      return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    };
+    var L = 0.2126 * lin(n >> 16 & 255) + 0.7152 * lin(n >> 8 & 255) + 0.0722 * lin(n & 255);
+    return L > 0.18 ? '#0b0c0e' : '#fff';
+  }
   var WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   var MONTHS = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -144,7 +157,7 @@
             class: 'btn',
             type: 'button',
             onClick: openAddModal,
-          }, ['＋ Add your first habit']),
+          }, ['+ Add your first habit']),
         ])
       );
       return;
@@ -166,6 +179,7 @@
     // Custom properties must be set via setProperty; Object.assign(style, ...)
     // (used by App.el) silently ignores dashed property names.
     card.style.setProperty('--habit-color', color);
+    card.style.setProperty('--habit-ink', inkFor(color));
 
     // --- Header: title, badges, actions ---
     var badges = el('div', { class: 'row row--wrap habit-badges' });
@@ -208,7 +222,7 @@
         onClick: function () { openEditModal(habit); },
       }, ['Edit']),
       el('button', {
-        class: 'btn btn--ghost btn--sm habit-delete',
+        class: 'btn btn--ghost btn--sm btn--quiet-danger',
         type: 'button',
         title: 'Remove habit',
         'aria-label': 'Remove ' + habit.name,

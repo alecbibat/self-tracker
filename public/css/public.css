@@ -54,6 +54,8 @@
   pointer-events: none;
 }
 
+.hero--gradient .hero__overlay { display: none; }
+
 .hero__content {
   position: relative;
   z-index: 1;
@@ -243,6 +245,8 @@
   position: absolute;
   top: 10px;
   left: 10px;
+  background: rgba(11, 12, 14, 0.65);
+  backdrop-filter: blur(3px);
 }
 
 .project-card__body {
@@ -277,7 +281,7 @@
   padding-top: 6px;
   color: var(--brand);
   font-size: 0.68rem;
-  font-weight: 650;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.11em;
 }
@@ -361,4 +365,8 @@
 
 .project-detail__actions .faint {
   font-weight: 400;
+}
+.project-detail__actions .btn .faint {
+  font-weight: 400;
+  color: rgba(11, 12, 14, 0.65);
 }
