@@ -79,7 +79,7 @@ const SCHEMA_STATEMENTS = [
       type       TEXT NOT NULL DEFAULT 'yesno' CHECK (type IN ('yesno','quantity')),
       unit       TEXT,
       target     NUMERIC,
-      color      TEXT NOT NULL DEFAULT '#5b8def',
+      color      TEXT NOT NULL DEFAULT '#c4a265',
       position   INTEGER NOT NULL DEFAULT 0,
       archived   BOOLEAN NOT NULL DEFAULT false,
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()

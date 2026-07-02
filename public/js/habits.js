@@ -9,7 +9,7 @@
   var el = App.el;
   var fmt = App.fmt;
 
-  var DEFAULT_COLOR = '#5b8def';
+  var DEFAULT_COLOR = '#c4a265';
   var WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   var MONTHS = [
     'January', 'February', 'March', 'April', 'May', 'June',

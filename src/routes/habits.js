@@ -13,7 +13,7 @@ const router = express.Router();
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const VALID_TYPES = new Set(['yesno', 'quantity']);
 const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
-const DEFAULT_COLOR = '#5b8def';
+const DEFAULT_COLOR = '#c4a265';
 
 /** True for a strict YYYY-MM-DD string that is also a real calendar date. */
 function isValidDate(str) {

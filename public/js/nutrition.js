@@ -53,13 +53,14 @@
     return (v && v.trim()) || fallback;
   }
   var COL = {
-    brand: cssVar('--brand', '#5b8def'),
-    accent: cssVar('--accent-2', '#a06bff'),
-    warn: cssVar('--warn', '#e0a94f'),
-    success: cssVar('--success', '#3fb96b'),
-    danger: cssVar('--danger', '#e5544b'),
-    text: cssVar('--text-muted', '#9aa3b2'),
-    grid: cssVar('--border', '#2a2f3a'),
+    // Categorical series, validated against the dark card surface.
+    series1: cssVar('--chart-1', '#b98c35'), // gold — calories, protein
+    series2: cssVar('--chart-2', '#4f88cf'), // steel — carbs
+    series3: cssVar('--chart-3', '#c25f87'), // rose — fat
+    ink: cssVar('--text', '#e9e7e2'),        // single-series line (weight)
+    goal: cssVar('--text-faint', '#64615a'), // dashed reference lines
+    text: cssVar('--text-muted', '#97948c'),
+    grid: cssVar('--chart-grid', '#1c1e23'),
   };
 
   // =====================================================================
@@ -863,13 +864,13 @@
     var datasets = [{
       label: 'Calories',
       data: rows.map(function (r) { return r.calories; }),
-      backgroundColor: COL.brand,
+      backgroundColor: COL.series1,
       borderRadius: 4,
       maxBarThickness: 42,
       order: 2,
     }];
     if (GOALS.calories > 0) {
-      datasets.push(Object.assign(goalLineDataset(rows, GOALS.calories, COL.warn, 'Goal'), { order: 1 }));
+      datasets.push(Object.assign(goalLineDataset(rows, GOALS.calories, COL.goal, 'Goal'), { order: 1 }));
     }
     charts.calories = new window.Chart(ctx, {
       type: 'bar',
@@ -898,7 +899,7 @@
       type: 'line',
       data: {
         labels: labelsFor(rows),
-        datasets: [line('Protein', 'protein', COL.brand), line('Carbs', 'carbs', COL.accent), line('Fat', 'fat', COL.warn)],
+        datasets: [line('Protein', 'protein', COL.series1), line('Carbs', 'carbs', COL.series2), line('Fat', 'fat', COL.series3)],
       },
       options: baseOptions({ plugins: { legend: { display: true, labels: { color: COL.text } }, tooltip: { enabled: true } } }),
     });
@@ -913,8 +914,8 @@
     var datasets = [{
       label: 'Weight (' + WEIGHT_GOAL.unit + ')',
       data: rows.map(function (r) { return r.weight === null || r.weight === undefined ? null : r.weight; }),
-      borderColor: COL.success,
-      backgroundColor: COL.success,
+      borderColor: COL.ink,
+      backgroundColor: COL.ink,
       borderWidth: 2,
       pointRadius: rows.length > 40 ? 0 : 3,
       tension: 0.25,
@@ -922,7 +923,7 @@
       fill: false,
     }];
     if (WEIGHT_GOAL.target !== null) {
-      datasets.push(goalLineDataset(rows, WEIGHT_GOAL.target, COL.warn, 'Goal'));
+      datasets.push(goalLineDataset(rows, WEIGHT_GOAL.target, COL.goal, 'Goal'));
     }
     charts.weight = new window.Chart(ctx, {
       type: 'line',

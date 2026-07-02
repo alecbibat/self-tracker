@@ -3,7 +3,7 @@
    ========================================================================= */
 
 .habit-card {
-  --habit-color: #5b8def;
+  --habit-color: #c4a265;
   padding: 20px;
 }
 
@@ -34,7 +34,9 @@
 }
 .habit-name {
   margin: 0;
-  font-size: 1.15rem;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.35rem;
   overflow-wrap: anywhere;
 }
 .habit-badges { gap: 6px; }

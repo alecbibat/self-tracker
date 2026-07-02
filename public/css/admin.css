@@ -140,10 +140,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--brand), var(--accent-2));
-  color: #fff;
-  font-size: 1.5rem;
-  font-weight: 700;
+  background:
+    radial-gradient(220px 120px at 50% -20%, rgba(196, 162, 101, 0.14), transparent 62%),
+    linear-gradient(155deg, #16181d, #0d0e11);
+  color: rgba(233, 231, 226, 0.35);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 500;
 }
 .admin-project__body {
   flex: 1 1 auto;
