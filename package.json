@@ -1,6 +1,6 @@
 {
   "name": "self-tracker",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Personal self-tracker: habit tracker, calorie/macro/weight tracker, and a public portfolio with projects and a photo reel.",
   "main": "server.js",
   "type": "commonjs",

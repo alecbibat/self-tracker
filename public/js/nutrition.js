@@ -63,6 +63,11 @@
     grid: cssVar('--chart-grid', '#1c1e23'),
   };
 
+  // Charts inherit the app typeface instead of Chart.js's default stack.
+  if (window.Chart) {
+    window.Chart.defaults.font.family = cssVar('--font', 'sans-serif');
+  }
+
   // Thin-stroke chevron used for weight-trend indicators (replaces ▲/▼).
   function trendArrow(up) {
     return el('span', {
